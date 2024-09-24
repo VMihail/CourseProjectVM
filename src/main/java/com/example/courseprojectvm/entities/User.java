@@ -16,13 +16,28 @@ import java.util.Set;
 @Builder
 @AllArgsConstructor
 public class User implements UserDetails {
+    /**
+     * Уникальный идентификатор пользователя.
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    /**
+     * Имя пользователя (уникальное), которое используется для аутентификации.
+     */
     @Column(name = "username", unique = true, nullable = false)
     private String username;
+
+    /**
+     * Пароль пользователя (хранится в зашифрованном виде).
+     */
     @Column(name = "password", unique = true, nullable = false)
     private String password;
+
+    /**
+     * Роли, которые связаны с пользователем. Используются для авторизации (например, ROLE_USER, ROLE_ADMIN).
+     */
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<Role> roles;
 
