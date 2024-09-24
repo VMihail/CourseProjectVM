@@ -12,10 +12,18 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Role implements GrantedAuthority {
+
+    /**
+     * Уникальный идентификатор роли.
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+
+    /**
+     * Название роли.
+     */
     @Column(name = "name", unique = true)
     private String name;
 
