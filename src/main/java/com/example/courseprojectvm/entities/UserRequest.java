@@ -3,7 +3,14 @@ package com.example.courseprojectvm.entities;
 import java.util.Objects;
 
 public final class UserRequest {
+    /**
+     * Логин пользователя.
+     */
     private final String username;
+
+    /**
+     * Пароль пользователя.
+     */
     private final String password;
 
     public UserRequest(String username, String password) {
