@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editing Panel</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .form-container {
+            margin-bottom: 20px;
+        }
+
+        input, button {
+            margin: 5px 0;
+            padding: 10px;
+            width: 100%;
+        }
+
+        .cat-list {
+            margin-top: 20px;
+        }
+
+        .cat-list-item {
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Управление Cat Citizens</h1>
+
+<div class="form-container">
+    <h2>Добавить или обновить Cat Citizen</h2>
+    <input type="text" id="cat-id" placeholder="ID (для обновления)">
+    <input type="text" id="cat-name" placeholder="Имя">
+    <input type="text" id="cat-image-url" placeholder="URL изображения">
+    <button onclick="createOrUpdateCat()">Добавить/Обновить</button>
+</div>
+
+<div class="form-container">
+    <button onclick="loadCats()">Получить всех Cat Citizens</button>
+</div>
+
+<div class="form-container">
+    <h2>Удалить Cat Citizen</h2>
+    <input type="text" id="delete-cat-id" placeholder="ID для удаления">
+    <button onclick="deleteCat()">Удалить</button>
+</div>
+
+<div class="cat-list" id="cat-list">
+    <h2>Все Cat Citizens</h2>
+</div>
+
+<script>
+    const apiUrl = 'http://localhost:8080/cat-citizens';
+
+    function loadCats() {
+        fetch(apiUrl)
+            .then(response => response.json())
+            .then(data => {
+                const catList = document.getElementById('cat-list');
+                catList.innerHTML = '';
+
+                data.forEach(cat => {
+                    catList.innerHTML += `
+                            <div class="cat-list-item">
+                                <p><strong>ID:</strong> ${cat.id}</p>
+                                <p><strong>Имя:</strong> ${cat.name}</p>
+                                <p><strong>URL изображения:</strong> <a href="${cat.imageUrl}" target="_blank">Посмотреть</a></p>
+                                <button onclick="editCat(${cat.id}, '${cat.name}', '${cat.imageUrl}')">Редактировать</button>
+                            </div>
+                        `;
+                });
+            });
+    }
+
+    function createOrUpdateCat() {
+        const id = document.getElementById('cat-id').value;
+        const name = document.getElementById('cat-name').value;
+        const imageUrl = document.getElementById('cat-image-url').value;
+
+        const catCitizen = {
+            name: name,
+            imageUrl: imageUrl
+        };
+
+        let method = 'POST';
+        let url = apiUrl;
+
+        if (id) {
+            method = 'PUT';
+            url = `${apiUrl}/${id}`;
+        }
+
+        fetch(url, {
+            method: method,
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(catCitizen)
+        })
+            .then(response => {
+                if (response.ok) {
+                    alert('Успешно');
+                    document.getElementById('cat-id').value = '';
+                    document.getElementById('cat-name').value = '';
+                    document.getElementById('cat-image-url').value = '';
+                    loadCats();
+                } else {
+                    alert('Ошибка');
+                }
+            });
+    }
+
+    function deleteCat() {
+        const id = document.getElementById('delete-cat-id').value;
+
+        if (!id) {
+            alert('Введите ID для удаления');
+            return;
+        }
+
+        fetch(`${apiUrl}/${id}`, {
+            method: 'DELETE'
+        })
+            .then(response => {
+                if (response.ok) {
+                    alert('Удалено');
+                    document.getElementById('delete-cat-id').value = '';
+                    loadCats();
+                } else {
+                    alert('Ошибка при удалении');
+                }
+            });
+    }
+
+    function editCat(id, name, imageUrl) {
+        document.getElementById('cat-id').value = id;
+        document.getElementById('cat-name').value = name;
+        document.getElementById('cat-image-url').value = imageUrl;
+    }
+
+    window.onload = loadCats;
+</script>
+
+</body>
+</html>
