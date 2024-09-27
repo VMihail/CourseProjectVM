@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: CourseProjectVM
+  datasource:
+    url: jdbc:postgresql://dpg-crou1ojv2p9s739aimsg-a.oregon-postgres.render.com/cpdb_clo0
+    username: test
+    password: Vo3wMG71W6h1aRF4ZPZymdVNdphyyE2M
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+server:
+  port: 8080
