@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Кошачье национальное государство. Националистическое государство</title>
+    <meta name="server-processing-time" th:content="${backendExecutionTime}">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/about.css">
+    <link
+            href="https://fonts.googleapis.com/css?family=Kaushan+Script|Montserrat:400,700&amp;subset=cyrillic-ext"
+            rel="stylesheet"
+    >
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1.5.1/dist/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <script src="../js/header.js"></script>
+    <script src="../js/performance.js"></script>
+    <script src="../js/expression.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+        var socket = new SockJS('/ws');
+        var stompClient = Stomp.over(socket);
+        stompClient.connect({}, function (frame) {
+            console.log('Connected: ' + frame);
+            stompClient.subscribe('/topic/citizens', function (message) {
+                var receivedMessage = message.body;
+                toastr.success(receivedMessage);
+            });
+        });
+    });
+    </script>
+</head>
+<body>
+<div th:replace="header :: content"></div>
+<main class="main">
+    <div class="container">
+        <div class="introInner">
+            <h1 class="introTitle">Кошачье национальное государство</h1>
+        </div>
+        <h2>О нас</h2>
+        <section class="about">
+            <p>
+                Кошачье национальное государство - уникальное место, где кошки владеют всем, от правления до законов.
+                У них есть свои города с комфортом и безопасностью, а также культурные мероприятия.
+                Это демонстрирует, как животные могут существовать независимо и в гармонии с природой.
+            </p>
+        </section>
+    </div>
+    <div class="container">
+        <section class="countryFacts">
+            <div class="fact">
+                <h3>Форма правления:</h3>
+                <p>Федеративная президентская республика</p>
+            </div>
+            <div class="fact">
+                <h3>Продолжительность существования:</h3>
+                <p>
+                    Основано в далеком 3000 году до нашей эры, когда кошачьи мудрые предводители решили объединиться
+                    и создать свою собственную цивилизацию
+                </p>
+            </div>
+            <div class="fact">
+                <h3>ВВП страны:</h3>
+                <p>23.32 trillion USD в 2021</p>
+            </div>
+        </section>
+    </div>
+    <div>
+        <h2>Знаменитые граждане КНГ</h2>
+        <section class="imageGallery">
+            <ul class="containers">
+                <li th:each="catCitizen : ${catCitizensList}" class="slider">
+                    <img th:src="${catCitizen.getImageUrl()}" alt="фото гражданина" width="300">
+                    <p th:text="${catCitizen.getName()}"></p>
+                </li>
+            </ul>
+        </section>
+    </div>
+</main>
+<div th:replace="footer :: content"></div>
+</body>
+</html>
