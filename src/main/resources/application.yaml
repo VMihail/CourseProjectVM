@@ -2,9 +2,9 @@ spring:
   application:
     name: CourseProjectVM
   datasource:
-    url: jdbc:postgresql://dpg-crou1ojv2p9s739aimsg-a.oregon-postgres.render.com/cpdb_clo0
-    username: test
-    password: Vo3wMG71W6h1aRF4ZPZymdVNdphyyE2M
+    url: ${DATA_SOURCE_URL:jdbc:postgresql://localhost:5432/mydatabase}
+    username: ${USER_NAME:test}
+    password: ${PASSWORD:Vo3wMG71W6h1aRF4ZPZymdVNdphyyE2M}
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
