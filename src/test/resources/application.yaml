@@ -1,0 +1,22 @@
+spring:
+  jpa:
+    show-sql: false
+    open-in-view: false
+    properties:
+      hibernate:
+        type:
+          preferred_instant_jdbc_type: TIMESTAMP
+        jdbc:
+          batch_size: 20
+          time_zone: Europe/Moscow
+        generate_statistics: false
+#  liquibase:
+#    change-log: classpath:/changelog/changelog-master.xml
+#    enabled: true
+  datasource:
+    driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
+    url: jdbc:tc:postgresql:12:///databasename?TC_DAEMON=true
+    hikari:
+      connection-timeout: 60000
+      minimum-idle: 2
+      maximum-pool-size: 5
